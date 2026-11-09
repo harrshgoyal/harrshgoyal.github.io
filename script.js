@@ -1,35 +1,39 @@
-const root = document.documentElement;
-const themeButton = document.querySelector('.theme-toggle');
-const themeLabel = document.querySelector('.theme-label');
-const savedTheme = localStorage.getItem('personal-site-theme');
-if (savedTheme !== 'light') root.classList.add('dark');
-function updateThemeControl() {
-  const isDark = root.classList.contains('dark');
-  themeLabel.textContent = isDark ? 'Light mode' : 'Dark mode';
-  themeButton.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
-}
-updateThemeControl();
-themeButton.addEventListener('click', () => {
-  root.classList.toggle('dark');
-  localStorage.setItem('personal-site-theme', root.classList.contains('dark') ? 'dark' : 'light');
-  updateThemeControl();
-});
-const filters = [...document.querySelectorAll('.filter')];
-const projects = [...document.querySelectorAll('.project')];
-const emptyMessage = document.querySelector('.filter-empty');
-filters.forEach(button => button.addEventListener('click', () => {
-  const category = button.dataset.filter;
-  filters.forEach(item => {
-    const selected = item === button;
-    item.classList.toggle('active', selected);
-    item.setAttribute('aria-pressed', String(selected));
+// Theme toggle, draft mode, and project filters. No dependencies.
+(() => {
+  const root = document.documentElement;
+
+  // --- Theme (initial value is set by the inline script in <head>) ---
+  const toggle = document.querySelector('.theme-toggle');
+  const syncToggle = () => {
+    const dark = root.dataset.theme === 'dark';
+    toggle?.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
+  };
+  toggle?.addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+    syncToggle();
   });
-  let visible = 0;
-  projects.forEach(project => {
-    const show = category === 'all' || project.dataset.category === category;
-    project.hidden = !show;
-    if (show) visible++;
-  });
-  emptyMessage.hidden = visible > 0;
-}));
-document.querySelector('#year').textContent = new Date().getFullYear();
+  syncToggle();
+
+  // --- Draft mode: show placeholders only when previewing locally ---
+  const local = location.protocol === 'file:' || ['localhost', '127.0.0.1', ''].includes(location.hostname);
+  if (local || new URLSearchParams(location.search).has('draft')) {
+    root.classList.add('draft');
+    const banner = document.createElement('div');
+    banner.className = 'draft-banner';
+    banner.innerHTML = '<div class="wrap">Draft preview: orange boxes and links are placeholders and are hidden on the published site. See README.md.</div>';
+    document.body.prepend(banner);
+  }
+
+  // --- Project filters ---
+  const buttons = [...document.querySelectorAll('.filters button')];
+  const cases = [...document.querySelectorAll('.case')];
+  buttons.forEach(btn => btn.addEventListener('click', () => {
+    const f = btn.dataset.filter;
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+    cases.forEach(c => { c.hidden = f !== 'all' && !c.dataset.tags.split(' ').includes(f); });
+  }));
+
+  // --- Footer year ---
+  document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
+})();

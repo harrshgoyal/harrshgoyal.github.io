@@ -1,30 +1,40 @@
-# Harrsh Goyal — Personal Website
+# Harrsh Goyal — personal website
 
-A responsive, interactive personal site built with plain HTML, CSS, and JavaScript. It has no build step, package manager, or paid dependencies. Google Fonts are loaded when online; system fonts are used as fallbacks. Personal and project information is summarized from the CV provided in this directory. LinkedIn is linked as an external profile.
+A static site in plain HTML, CSS and JavaScript. It has no build step and no dependencies, and Google Fonts falls back to system fonts. It's built to host on GitHub Pages.
 
-## Preview it locally
+| File | Purpose |
+|---|---|
+| `index.html` | Home: summary, muEDM explainer, case studies, publications & talks, skills linked to evidence, timeline, contact |
+| `cv.html` | Public CV. Its print stylesheet gives a clean PDF via *Print → Save as PDF* |
+| `styles.css` | All styling. Colours are CSS variables at the top; dark mode uses `[data-theme="dark"]` |
+| `script.js` | Theme toggle, project filters, draft mode |
+| `charts.js` | Interactive SVG charts (emittance, phase-space ellipses) drawn from the thesis tables. Data lives at the top of each chart function |
+| `projects/` | One page per in-depth case study (currently `mue1-phase-space.html`) |
+| `assets/figures/` | Plots and images (see its README for the approval and quality checklist) |
+| `*.pdf` | Reference material (CV, thesis, paper). **All PDFs are git-ignored and never published.** |
 
-Open `index.html` in a browser, or from this directory run:
+## Preview
 
 ```sh
-python3 -m http.server 8000
+python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-Then visit <http://localhost:8000>.
+## Draft mode
 
-## Make it yours
+Unfinished content (missing figures, profile links, thesis and slide links) is marked `draft-only` and shows as **orange** boxes or links. It only appears when previewing locally (`file://` or `localhost`) or with `?draft` in the URL. On the published site it's hidden, so you can deploy at any point without placeholders showing.
 
-Edit `index.html` to update the home page and `cv.html` to update the public CV. Adjust colors, spacing, and responsive styles in `styles.css`. The theme switch remembers its choice in the browser, and project filters work without a server.
+To finish an item, fill in the real link or figure and remove `draft-only` and `todo` from its class. A full list of what's left:
 
-`CV_HG.pdf` is the original source file and is excluded by `.gitignore`. The website displays a public CV page in `cv.html` that omits the home address, phone number, date of birth, and referee details.
+```sh
+grep -n 'draft-only\|TODO' index.html cv.html
+```
 
-## Free public hosting with GitHub Pages
+## Adding a project
 
-GitHub Pages can host this static site at a public URL at no cost for a public repository. The files intended for publication are `index.html`, `cv.html`, `styles.css`, `script.js`, and `.nojekyll`:
+Copy an existing `<article class="case">` block in `index.html`. Fill in **Question / My role / Result**, the tags, and evidence links (DOI, code, slides). Set `data-tags` to one or more of `particle`, `cosmology`, `software` for the filters. Give it an `id` and link to it from the skills table.
 
-1. Create a public repository on GitHub (for a personal URL, name it `YOUR-USERNAME.github.io`).
-2. Add the website files to the repository root. The original `CV_HG.pdf` is excluded from Git by `.gitignore`; do not force-add it.
-3. In the repository, open **Settings → Pages** and select **Deploy from a branch**, then choose the default branch and `/ (root)`.
-4. GitHub will show the published URL in the Pages settings after deployment.
+## Publishing (GitHub Pages)
 
-A custom domain is optional and may have a separate registration cost. After publishing, edits made in this workspace reach the live site when the updated website files are pushed to the repository.
+1. Push this repository to a public GitHub repo (name it `USERNAME.github.io` for a root URL).
+2. In **Settings → Pages**, choose **Deploy from a branch** with the default branch and `/ (root)`.
+3. Changes go live a minute or two after each push.

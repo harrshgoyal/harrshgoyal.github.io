@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>µE1 beam phase space — Harrsh Goyal</title>
+  <meta name="description" content="Case study: measuring and modelling the six-dimensional phase space of the µE1 muon beamline at PSI for Phase II of the muEDM experiment. Master's thesis of Harrsh Goyal.">
+  <meta property="og:title" content="Measuring the 6D phase space of the µE1 muon beam">
+  <meta property="og:description" content="Master's thesis at PSI: beam rates, emittances and momentum spread for muEDM Phase II, modelled to within 0.21% with XSuite.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../script.js" defer></script>
+  <script src="../charts.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Harrsh Goyal</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="../index.html#research">Research</a>
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../index.html#publications">Publications</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../cv.html">CV</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle colour theme">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main" class="wrap study">
+  <div class="study-head">
+    <a class="backlink" href="../index.html#thesis">← All work</a>
+    <p class="label" style="margin-top:18px">Master's thesis · Paul Scherrer Institute · 2024–2025</p>
+    <h1>Measuring the 6D phase space of the µE1 muon beam</h1>
+    <p class="lede">Phase II of muEDM needs a high-rate beam of 125 MeV/c muons. I helped measure what the µE1 beamline at PSI actually delivers in its Z-configuration, and built simulations that reproduce it.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="k">Muon rate, 125 MeV/c</span><span class="v">1.1 × 10⁸ μ⁺/s</span><span class="n">at 1.6 mA proton current, the highest of all tunes measured in either configuration</span></div>
+    <div class="stat"><span class="k">Emittance x / y</span><span class="v">920 / 213</span><span class="n">mm·mrad (rms). Adopted as the Phase II beam in EPJ C 85, 622</span></div>
+    <div class="stat"><span class="k">Momentum spread</span><span class="v">3.41 ± 0.20 %</span><span class="n">ΔP/P at 125 MeV/c, measured with a LaBr₃ calorimeter</span></div>
+    <div class="stat"><span class="k">Simulation vs data</span><span class="v">≤ 0.21 %</span><span class="n">largest XSuite deviation from measured beam parameters, across 3 tunes</span></div>
+  </div>
+
+  <h2>Why it matters</h2>
+  <p>The statistical sensitivity of a frozen-spin EDM search improves with the number of muons stored and with their momentum. Phase II of muEDM plans to use muons of about 125 MeV/c from the µE1 beamline. Earlier characterisations of µE1 covered its <em>U-configuration</em>. In the <em>Z-configuration</em>, the last bending magnet (ASK82) bends the beam the opposite way, which promises higher rates and lower energy dispersion, but it had not been measured.</p>
+  <p>A model of the beamline is only as good as the beam put into it. Measuring the full phase space at the end of the line is the first step towards propagating it backwards and optimising the beam for the experiment.</p>
+
+  <h2>What I did</h2>
+  <ul class="plain">
+    <li><strong>Beamtime, June 2024.</strong> A week-long measurement campaign at µE1 with the PSI muEDM group. I took part in the setup, alignment and data taking.</li>
+    <li><strong>Hardware.</strong> I designed the holders for the scintillator-cross trigger (SciCross) and the LaBr₃ calorimeter in Onshape and had them 3D printed. They mount on an XYZ table so the detector can be moved across the beam.</li>
+    <li><strong>Detectors and DAQ.</strong> A 21 × 21 scintillating-fibre grid (SciFi) measured beam profiles. SciCross plus LaBr₃, in 5-point coincidence, measured energy. Everything was read out through PSI's WaveDAQ.</li>
+    <li><strong>Measurements.</strong> Quadrupole scans of the final doublet (QSK810/811), Z scans, time-of-flight vs energy, and position–momentum slicing for dispersion. These covered 100 and 125 MeV/c muons from backward pion decay and 140 MeV/c muons from forward decay.</li>
+    <li><strong>Analysis.</strong> I extracted the beam matrix and Twiss parameters, rates, momentum spread and dispersion for each tune, using C++/ROOT and Python.</li>
+    <li><strong>Modelling.</strong> I reproduced the measurements in three independent codes: TRANSPORT, XSuite (symplectic single-particle tracking) and G4beamline (Geant4-based).</li>
+  </ul>
+
+  <h2>Results</h2>
+
+  <figure class="chart-card">
+    <h4>Transverse phase space of the 125 MeV/c beam</h4>
+    <ul class="legend" aria-hidden="true"><li><i class="solid"></i>Horizontal (x, x′)</li><li><i class="dash"></i>Vertical (y, y′)</li></ul>
+    <div data-chart="ellipses"></div>
+    <figcaption>rms (1σ) ellipses at the SciFi detector, 855 mm after the last quadrupole, drawn from the measured Twiss parameters. The beam is wide in angle horizontally and correlated (tilted) vertically. Hover over or focus an ellipse for its parameters.</figcaption>
+    <details><summary>Show as table</summary>
+      <table class="data-table"><thead><tr><th>Parameter</th><th class="num">Horizontal</th><th class="num">Vertical</th></tr></thead><tbody>
+        <tr><td>α</td><td class="num">0.0384 ± 0.0029</td><td class="num">−0.6219 ± 0.0167</td></tr>
+        <tr><td>β [m/rad]</td><td class="num">0.1920 ± 0.0189</td><td class="num">0.8420 ± 0.0444</td></tr>
+        <tr><td>γ [rad/m]</td><td class="num">5.2165 ± 0.0167</td><td class="num">1.6470 ± 0.0040</td></tr>
+        <tr><td>ε [mm·mrad]</td><td class="num">920.3 ± 45.4</td><td class="num">213.2 ± 8.1</td></tr>
+      </tbody></table>
+    </details>
+  </figure>
+
+  <div class="fig-row">
+    <figure class="chart-card">
+      <h4>Emittance at 125 MeV/c, Z vs U configuration (mm·mrad)</h4>
+      <ul class="legend" aria-hidden="true"><li><i></i>Z-config, 2024 (this work)</li><li><i class="s2"></i>U-config, 2019</li></ul>
+      <div data-chart="emittance"></div>
+      <figcaption>Lower emittance means more of the beam fits into the experiment's acceptance. Z is lower in three of four cases and comparable in the fourth. U values from M. Sakurai, PhD thesis, ETH Zurich (2023).</figcaption>
+      <details><summary>Show as table</summary>
+        <table class="data-table"><thead><tr><th>Tune · plane</th><th class="num">Z 2024</th><th class="num">U 2019</th></tr></thead><tbody>
+          <tr><td>New · x</td><td class="num">920.3 ± 45.4</td><td class="num">946</td></tr>
+          <tr><td>New · y</td><td class="num">213.2 ± 8.1</td><td class="num">716</td></tr>
+          <tr><td>µSR · x</td><td class="num">860.8 ± 20.7</td><td class="num">995</td></tr>
+          <tr><td>µSR · y</td><td class="num">194.4 ± 5.9</td><td class="num">331</td></tr>
+        </tbody></table>
+      </details>
+    </figure>
+    <figure class="fig chart-card">
+      <h4>Muon rate by beam tune</h4>
+      <img src="../assets/figures/mue1-rates-by-beamtune.webp" width="737" height="728" loading="lazy" alt="Scatter plot of muon beam rate versus momentum from 65 to 125 MeV/c. The 2024 Z-configuration new tune at 125 MeV/c reaches about 1.1 × 10^8 muons per second, above every 2019 U-configuration tune, the best of which is about 0.83 × 10^8 at 125 MeV/c.">
+      <figcaption>Rate at 1.6 mA proton current. The 2024 Z-configuration "new" tune (green) at 125 MeV/c is the highest measured. 2019 U-configuration points adapted from M. Sakurai (2023). Figure from my thesis.</figcaption>
+    </figure>
+  </div>
+
+  <div class="callout">
+    <p><strong>Outcome.</strong> The 125 MeV/c "new" tune in the Z-configuration combines the highest rate with the lowest emittances, so I recommended it as the leading candidate for muEDM Phase II. Its emittances (920 and 213 mm·mrad) are the Phase II beam parameters quoted in the collaboration's 2025 design paper, <a href="https://doi.org/10.1140/epjc/s10052-025-14295-7" target="_blank" rel="noopener">EPJ C 85, 622</a>.</p>
+  </div>
+
+  <h2>Simulation: three codes, one beam</h2>
+  <p>Starting from the phase space measured upstream of the final quadrupole doublet, I propagated the beam to the SciFi detector in each code and compared the result with the measurement.</p>
+  <div class="fig-row">
+    <figure class="chart-card">
+      <h4>XSuite vs measurement, 125 MeV/c new tune</h4>
+      <div class="table-wrap" style="border:0">
+        <table class="data-table"><thead><tr><th>Quantity</th><th class="num">Measured</th><th class="num">XSuite</th></tr></thead><tbody>
+          <tr><td>√σ<sub>xx</sub> [mm]</td><td class="num">13.30 ± 1.04</td><td class="num">13.30</td></tr>
+          <tr><td>√σ<sub>θθ</sub> [mrad]</td><td class="num">69.29 ± 2.43</td><td class="num">69.34</td></tr>
+          <tr><td>ρ<sub>xθ</sub></td><td class="num">−0.038 ± 0.008</td><td class="num">−0.037</td></tr>
+          <tr><td>√σ<sub>yy</sub> [mm]</td><td class="num">13.39 ± 0.62</td><td class="num">13.39</td></tr>
+          <tr><td>√σ<sub>φφ</sub> [mrad]</td><td class="num">18.74 ± 0.51</td><td class="num">18.74</td></tr>
+          <tr><td>ρ<sub>yφ</sub></td><td class="num">0.528 ± 0.024</td><td class="num">0.529</td></tr>
+        </tbody></table>
+      </div>
+      <figcaption>All parameters agree well within uncertainties. Across the three backward-decay tunes the largest deviation is 0.21 %. TRANSPORT also reproduces the data. G4beamline agrees to within 30 % (worst for the vertical beam size), within the usual tolerance for a stochastic Geant4 simulation.</figcaption>
+    </figure>
+    <figure class="fig chart-card">
+      <h4>G4beamline: muons through the final doublet</h4>
+      <img src="../assets/figures/g4beamline-quadrupole-doublet.webp" width="863" height="783" loading="lazy" alt="G4beamline 3D render: red cylindrical quadrupole magnets focus a cyan bundle of muon tracks to a waist at a green disc representing the SciFi detector. Thin yellow lines are decay positrons.">
+      <figcaption>µ⁺ tracks (cyan) and decay positrons (yellow) through quadrupoles QSK810/811 (red), reaching the SciFi detector (green). 100 MeV/c tune.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Open questions I flagged</h2>
+  <ul class="plain">
+    <li><strong>Vertical dispersion.</strong> At 100 MeV/c the beam shows non-zero <em>vertical</em> energy dispersion, although µE1 never bends vertically. The most likely source is the upstream pion-decay solenoid twisting the beam. This needs dedicated measurements, because it feeds directly into Phase II systematics.</li>
+    <li><strong>Missing correlations.</strong> Dipole scans are needed to measure the angle–momentum terms (σ<sub>θδ</sub>, σ<sub>φδ</sub>), and magnet hysteresis was not yet quantified.</li>
+    <li><strong>Full-beamline model.</strong> The back-propagation works for the final doublet. Extending it through the whole line, where modelling the ASK bending magnets is the main hurdle, would let the beam be optimised offline for Phase II.</li>
+  </ul>
+
+  <h2>Evidence</h2>
+  <ul class="plain">
+    <li>Thesis: <em>Characterization of the 6D Phase Space of a Muon Beam for the Measurement of the Muon Electric Dipole Moment</em>, IISER Pune (2025). Supervisor: Dr. Philipp Schmidt-Wellenburg, PSI. <a href="https://dr.iiserpune.ac.in/items/798ab5f2-210d-47e6-964f-2ca9cfb8442b" target="_blank" rel="noopener">Full text in the IISER Pune repository ↗</a></li>
+    <li>Talk: "MuE1 Characterisation Z-configuration for the muEDM Experiment", muEDM Collaboration Meeting, PSI, December 2024.</li>
+    <li>Paper using these beam parameters: <a href="https://doi.org/10.1140/epjc/s10052-025-14295-7" target="_blank" rel="noopener">A. Adelmann et al., EPJ C 85, 622 (2025)</a> · <a href="https://arxiv.org/abs/2501.18979" target="_blank" rel="noopener">arXiv:2501.18979</a></li>
+    <li>Simulation code (TRANSPORT, XSuite, G4beamline) is in the muEDM collaboration GitLab.</li>
+  </ul>
+  <p class="muted" style="font-size:.85rem;margin-top:32px">Figures and numbers are from my thesis unless stated otherwise.</p>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© <span data-year>2026</span> Harrsh Goyal</span>
+    <a href="../index.html#work">← All work</a>
+  </div>
+</footer>
+</body>
+</html>
